@@ -1,90 +1,100 @@
-* {
-  box-sizing: border-box;
-}
-
+/* Tela branca */
 body {
-  font-family: sans-serif;
-  margin: 20px;
-  padding: 0;
+  font-family: 'Arial', sans-serif;
+  background-color: #ffffff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
 }
 
-h1 {
-  margin-top: 0;
-  font-size: 22px;
-}
-
-h2 {
-  margin-top: 0;
-  font-size: 20px;
-}
-
-h3 {
-  margin-top: 0;
-  font-size: 18px;
-}
-
-h4 {
-  margin-top: 0;
-  font-size: 16px;
-}
-
-h5 {
-  margin-top: 0;
-  font-size: 14px;
-}
-
-h6 {
-  margin-top: 0;
-  font-size: 12px;
-}
-
-code {
-  font-size: 1.2em;
-}
-
-ul {
-  padding-inline-start: 20px;
-}
-
-* {
-  box-sizing: border-box;
-}
-
-body {
-  font-family: sans-serif;
-  margin: 20px;
-  padding: 0;
-}
-
-.square {
-  background: #fff;
-  border: 1px solid #999;
-  float: left;
-  font-size: 24px;
-  font-weight: bold;
-  line-height: 34px;
-  height: 34px;
-  margin-right: -1px;
-  margin-top: -1px;
-  padding: 0;
-  text-align: center;
-  width: 34px;
-}
-
-.board-row:after {
-  clear: both;
-  content: '';
-  display: table;
-}
-
-.status {
-  margin-bottom: 10px;
-}
 .game {
   display: flex;
   flex-direction: row;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 20px;
+}
+
+.game-board {
+  margin-right: 20px;
 }
 
 .game-info {
   margin-left: 20px;
+}
+
+ol {
+  padding-left: 20px;
+}
+
+li {
+  list-style: decimal;
+  margin-bottom: 10px;
+}
+
+button {
+  font-size: 16px;
+  padding: 8px 16px;
+  border-radius: 5px;
+  border: 1px solid #999;
+  background-color: #4CAF50;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #45a049;
+}
+
+button:focus {
+  outline: none;
+}
+
+.board-row {
+  display: flex;
+}
+
+.square {
+  width: 150px;
+  height: 150px;
+  background-color: #fff;
+  border: 2px solid #000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.square:hover {
+  background-color: #ddd;
+}
+
+/* Estilos para X e O usando imagens */
+.square.x {
+  background-image: url('./images/cross.png'); /* Imagem de X */
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.square.o {
+  background-image: url('./images/circle.png'); /* Imagem de O */
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.game-info > div {
+  margin-bottom: 20px;
+  font-size: 24px;
+  font-weight: bold;
+  color: red;
+}
+
+.winner {
+  color: purple;
 }

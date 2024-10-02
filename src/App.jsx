@@ -1,10 +1,11 @@
 import { useState } from 'react';
-import axios from 'axios'; // Para fazer requisições HTTP
+import './App.css'; // Importar o CSS
 
 function Square({ value, onSquareClick }) {
+  const className = value === 'X' ? 'square x' : value === 'O' ? 'square o' : 'square';
   return (
-    <button className="square" onClick={onSquareClick}>
-      {value}
+    <button className={className} onClick={onSquareClick}>
+      {/* Não é mais necessário renderizar o valor aqui, pois a imagem será aplicada via CSS */}
     </button>
   );
 }
@@ -12,7 +13,7 @@ function Square({ value, onSquareClick }) {
 function Board({ xIsNext, squares, onPlay }) {
   function handleClick(i) {
     if (squares[i] || squares.every(Boolean)) {
-      return; // Impede que uma célula já preenchida ou tabuleiro completo seja clicada
+      return;
     }
     const nextSquares = squares.slice();
     if (xIsNext) {
@@ -47,50 +48,23 @@ function Board({ xIsNext, squares, onPlay }) {
 export default function Game() {
   const [history, setHistory] = useState([Array(9).fill(null)]);
   const [currentMove, setCurrentMove] = useState(0);
-  const [winner, setWinner] = useState(null); // Estado para o vencedor
+  const [winner, setWinner] = useState(null);
   const xIsNext = currentMove % 2 === 0;
   const currentSquares = history[currentMove];
-
-  // Função para verificar o vencedor no backend
-  async function checkWinner(squares) {
-    try {
-      console.log("Enviando tabuleiro para o backend:", squares);  // Verificar o estado do tabuleiro enviado
-      const response = await axios.post('http://localhost:5000/check_winner', {
-        board: squares,
-      });
-      console.log("Resposta do backend: ", response.data); // Verificar a resposta do backend
-      setWinner(response.data.winner); // Definir o vencedor com base na resposta do backend
-    } catch (error) {
-      console.error('Erro ao verificar o vencedor:', error);
-    }
-  }
 
   function handlePlay(nextSquares) {
     const nextHistory = [...history.slice(0, currentMove + 1), nextSquares];
     setHistory(nextHistory);
     setCurrentMove(nextHistory.length - 1);
-
-    // Contar o número de jogadas (não vazios)
-    const numberOfMoves = nextSquares.filter(square => square !== null).length;
-
-    // Só verificar o vencedor se houver pelo menos 5 jogadas
-    if (numberOfMoves >= 5) {
-      checkWinner(nextSquares);
-    }
   }
 
   function jumpTo(nextMove) {
     setCurrentMove(nextMove);
-    setWinner(null); // Redefine o vencedor ao voltar para um movimento anterior
+    setWinner(null);
   }
 
   const moves = history.map((squares, move) => {
-    let description;
-    if (move > 0) {
-      description = 'Go to move #' + move;
-    } else {
-      description = 'Go to game start';
-    }
+    const description = move ? 'Go to move #' + move : 'Go to game start';
     return (
       <li key={move}>
         <button onClick={() => jumpTo(move)}>{description}</button>
@@ -99,13 +73,11 @@ export default function Game() {
   });
 
   let status;
-if (winner === 'Empate') {
-  status = 'Empate!';
-} else if (winner === 'Tem jogo') {
-  status = 'O jogo ainda está em andamento!';
-} else if (winner) {
-  status = 'Winner: ' + winner;
-} 
+  if (winner) {
+    status = `Winner: ${winner}`;
+  } else {
+    status = `Next player: ${xIsNext ? 'X' : 'O'}`;
+  }
 
   return (
     <div className="game">
