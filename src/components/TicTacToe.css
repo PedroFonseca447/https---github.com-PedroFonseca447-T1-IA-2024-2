@@ -1,0 +1,60 @@
+.container {
+    text-align: center;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.title{
+    margin-top: 50px;
+    color: white;
+    font-size: 60px;
+    display: flex; 
+    justify-content: center;
+    align-items: center;
+}
+
+.title img {
+    padding: 20px 20px;
+    height: 50px;
+}
+
+.reset{
+    width: 240px;
+    height: 80px;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    border-radius: 50px;
+    background: #1f3540;
+    font-size: 22px;
+    color: #26ffcb;
+    margin-top: 80px;
+}
+
+.boxes {
+    display: flex;
+    height: 120px;
+    width: 120px;
+    background:#1f3540;
+    border-radius: 12px;
+}
+
+.boxes img{
+    height: 80px;
+    width: 80px;
+    margin: auto;
+}
+
+.board {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* Cria 3 colunas com tamanhos iguais */
+    grid-template-rows: repeat(3, 1fr); /* Cria 3 linhas com tamanhos iguais */
+    width: 360px;    /* Largura total do tabuleiro */
+    height: 360px;   /* Altura total do tabuleiro */
+    margin: 0 auto;  /* Centralizar horizontalmente */
+    gap: 10px; /* Espaçamento entre as células */
+}

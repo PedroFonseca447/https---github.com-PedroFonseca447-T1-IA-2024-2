@@ -49,21 +49,23 @@ def predict_winner():
     if len(board) != 9:
         return jsonify({'error': 'O tabuleiro deve conter 9 posições'}), 400
 
-    # Codificar o tabuleiro para o modelo
-    encoded_board = np.array([encode_board(board)])
-    
-    # Fazer a previsão com o KNN
-    prediction = knn.predict(encoded_board)[0]
-
-    # Interpretar a previsão
-    if prediction == 1:
-        result = 'X venceu'
-    elif prediction == -1:
-        result = 'O venceu'
-    elif prediction == 0:
-        result = 'Empate'
+    # Primeiro, verificamos se ainda há espaços vazios, ou seja, o jogo está em andamento
+    if '' in board:
+        result = 'Em andamento'
     else:
-        result = 'Tem jogo'
+        # Se o tabuleiro estiver completo, codificar o tabuleiro para o modelo
+        encoded_board = np.array([encode_board(board)])
+        
+        # Fazer a previsão com o KNN
+        prediction = knn.predict(encoded_board)[0]
+
+        # Interpretar a previsão
+        if prediction == 1:
+            result = 'X venceu'
+        elif prediction == -1:
+            result = 'O venceu'
+        else:
+            result = 'Empate'
     
     return jsonify({'winner': result})
 
