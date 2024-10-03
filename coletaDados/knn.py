@@ -31,7 +31,7 @@ def train_model(game_data, ongoing_data):
     knn.fit(X, y)
     return knn
 
-file_path_game = 'C:\\Users\\Windows\\Documents\\IA-t1\\entrega\\coletaDados\\TrainDataSet.csv'  # Estados com "X venceu", "O venceu", e "Empate"
+file_path_game = 'C:\\Users\\Windows\\Documents\\IA-t1\\entrega\\coletaDados\\DataSetTreino.csv'  # Estados com "X venceu", "O venceu", e "Empate"
 file_path_ongoing = 'C:\\Users\\Windows\\Documents\\IA-t1\\entrega\\coletaDados\\dataSetAdicional.csv'  # Estados com "Tem jogo"
 
 # Ler os arquivos CSV
