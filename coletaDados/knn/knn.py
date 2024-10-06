@@ -31,8 +31,8 @@ def train_model(game_data, ongoing_data):
     knn.fit(X, y)
     return knn
 
-file_path_game = 'C:\\Users\\Windows\\Documents\\IA-t1\\entrega\\coletaDados\\DataSetTreino.csv'  # Estados com "X venceu", "O venceu", e "Empate"
-file_path_ongoing = 'C:\\Users\\Windows\\Documents\\IA-t1\\entrega\\coletaDados\\dataSetAdicional.csv'  # Estados com "Tem jogo"
+file_path_game = 'C:\\Users\\Windows\\Documents\\IA-t1\\entrega\\coletaDados\\datasets\\DataSetTreino.csv'  # Estados com "X venceu", "O venceu", e "Empate"
+file_path_ongoing = 'C:\\Users\\Windows\\Documents\\IA-t1\\entrega\\coletaDados\\datasets\\dataSetAdicional.csv'  # Estados com "Tem jogo"
 
 # Ler os arquivos CSV
 game_data = pd.read_csv(file_path_game, sep=',')

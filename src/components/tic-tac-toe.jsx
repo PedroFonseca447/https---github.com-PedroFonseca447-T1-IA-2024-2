@@ -7,13 +7,13 @@ import cross_icon from "../images/cross.png";
 const TicTacToe = () => {
     const [data, setData] = useState(Array(9).fill(null)); // Usando state para o tabuleiro
     const [count, setCount] = useState(0);
-    const [lock, setLock] = useState(false);
     const [winner, setWinner] = useState(null); // Estado para o vencedor
     const containerRef = useRef(null);
     const titleRef = useRef("");
 
     const toggle = (e, index) => {
-        if (lock || data[index]) return; // Previne modificar uma célula já preenchida ou se o jogo estiver travado
+        // Remover a verificação de "winner" para permitir jogadas após a vitória
+        if (data[index]) return; // Previne modificar uma célula já preenchida
 
         const newData = [...data]; // Cópia do estado atual do tabuleiro
 
@@ -48,7 +48,6 @@ const TicTacToe = () => {
                 titleRef.current.innerHTML = "Empate!";
             } else if (response.data.winner) {
                 titleRef.current.innerHTML = `Jogador <img src=${response.data.winner === "X" ? cross_icon : circle_icon} alt='icon' /> ganhou!`;
-               setLock(true); // Travar o jogo após encontrar um vencedor
             }
         } catch (error) {
             console.error('Erro ao verificar o vencedor:', error);
@@ -69,7 +68,6 @@ const TicTacToe = () => {
         setData(Array(9).fill(null)); // Reinicia o estado do tabuleiro
         titleRef.current.innerHTML = "Jogo da Velha";
         setCount(0);
-        setLock(false);
         containerRef.current.style.cursor = `url(${cross_icon}), auto`; // Reseta o cursor
         setWinner(null); // Reiniciar o estado do vencedor
     };
