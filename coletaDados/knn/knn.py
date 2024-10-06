@@ -27,7 +27,7 @@ def train_model(game_data, ongoing_data):
     X = combined_data.iloc[:, :-1].values  # As primeiras colunas são os estados do tabuleiro
     y = combined_data.iloc[:, -1].values   # A última coluna é o resultado
     
-    knn = KNeighborsClassifier(n_neighbors=3)
+    knn = KNeighborsClassifier(n_neighbors=2)
     knn.fit(X, y)
     return knn
 
