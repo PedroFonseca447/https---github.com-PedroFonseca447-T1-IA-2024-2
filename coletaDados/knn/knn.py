@@ -19,27 +19,27 @@ def encode_board(board):
             encoded.append(0)  # Trata null ou vazio como 0
     return encoded
 
+# Função para verificar se houve empate
+def check_tie(board):
+    return all(cell != '' for cell in board)  # Verifica se todas as células estão preenchidas
+
 # Treinar o modelo KNN com o dataset fornecido
-def train_model(game_data, ongoing_data):
-    # Combinar os datasets de jogo terminado e jogo em andamento
-    combined_data = pd.concat([game_data, ongoing_data], ignore_index=True)
-    
-    X = combined_data.iloc[:, :-1].values  # As primeiras colunas são os estados do tabuleiro
-    y = combined_data.iloc[:, -1].values   # A última coluna é o resultado
+def train_model(game_data):
+    X = game_data.iloc[:, :-1].values  # As primeiras colunas são os estados do tabuleiro
+    y = game_data.iloc[:, -1].values   # A última coluna é o resultado
     
     knn = KNeighborsClassifier(n_neighbors=2)
     knn.fit(X, y)
     return knn
 
-file_path_game = 'C:\\Users\\Windows\\Documents\\IA-t1\\entrega\\coletaDados\\datasets\\DataSetTreino.csv'  # Estados com "X venceu", "O venceu", e "Empate"
-file_path_ongoing = 'C:\\Users\\Windows\\Documents\\IA-t1\\entrega\\coletaDados\\datasets\\dataSetAdicional.csv'  # Estados com "Tem jogo"
+# Caminho do arquivo CSV contendo o dataset de jogos finalizados
+file_path_game = 'C:\\Users\\Windows\\Documents\\IA-t1\\entrega\\coletaDados\\datasets\\DataSetTreino.csv'
 
-# Ler os arquivos CSV
+# Ler o arquivo CSV
 game_data = pd.read_csv(file_path_game, sep=',')
-ongoing_data = pd.read_csv(file_path_ongoing, sep=',')
 
-# Treinar o modelo com os dois datasets
-knn = train_model(game_data, ongoing_data)
+# Treinar o modelo com o dataset de jogos finalizados
+knn = train_model(game_data)
 
 @app.route('/check_winner', methods=['POST'])
 def predict_winner():
@@ -49,14 +49,14 @@ def predict_winner():
     if len(board) != 9:
         return jsonify({'error': 'O tabuleiro deve conter 9 posições'}), 400
 
-    # Primeiro, verificamos se ainda há espaços vazios, ou seja, o jogo está em andamento
+   
     if '' in board:
         result = 'Em andamento'
     else:
-        # Se o tabuleiro estiver completo, codificar o tabuleiro para o modelo
+       
         encoded_board = np.array([encode_board(board)])
-        
-        # Fazer a previsão com o KNN
+
+       
         prediction = knn.predict(encoded_board)[0]
 
         # Interpretar a previsão
@@ -65,7 +65,9 @@ def predict_winner():
         elif prediction == -1:
             result = 'O venceu'
         else:
-            result = 'Empate'
+            
+            if check_tie(board):
+                result = 'Empate'
     
     return jsonify({'winner': result})
 

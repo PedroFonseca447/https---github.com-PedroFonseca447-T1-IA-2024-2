@@ -20,28 +20,22 @@ def encode_board(board):
     return encoded
 
 # Treinar o modelo MLP com o dataset fornecido
-def train_model(game_data, ongoing_data):
-    # Combinar os datasets de jogo terminado e jogo em andamento
-    combined_data = pd.concat([game_data, ongoing_data], ignore_index=True)
-    
-    X = combined_data.iloc[:, :-1].values  # As primeiras colunas são os estados do tabuleiro
-    y = combined_data.iloc[:, -1].values   # A última coluna é o resultado
-    
+def train_model(game_data):
+    X = game_data.iloc[:, :-1].values  
+    y = game_data.iloc[:, -1].values   
     # Definir e treinar a MLP
-    mlp = MLPClassifier(hidden_layer_sizes=(50), max_iter=150, random_state=42)
+    mlp = MLPClassifier(hidden_layer_sizes=(5), max_iter=600)
     mlp.fit(X, y)
     return mlp
 
 # Caminho dos arquivos CSV para treinamento
 file_path_game = 'C:\\Users\\Windows\\Documents\\IA-t1\\entrega\\coletaDados\\datasets\\DataSetTreino.csv'  # Estados com "X venceu", "O venceu", e "Empate"
-file_path_ongoing = 'C:\\Users\\Windows\\Documents\\IA-t1\\entrega\\coletaDados\\datasets\\dataSetAdicional.csv'  # Estados com "Tem jogo"
 
 # Ler os arquivos CSV
 game_data = pd.read_csv(file_path_game, sep=',')
-ongoing_data = pd.read_csv(file_path_ongoing, sep=',')
 
-# Treinar o modelo com os dois datasets
-mlp = train_model(game_data, ongoing_data)
+# Treinar o modelo com o dataset principal
+mlp = train_model(game_data)
 
 @app.route('/check_winner', methods=['POST'])
 def predict_winner():

@@ -23,13 +23,13 @@ def load_data(file_path, sep=','):
     
     return X, y
 
-# Carregar os dados de treino e validação
+# Carregar os dados de treino, validação e teste
 X_train, y_train = load_data(train_file_path, sep=',')
 X_val, y_val = load_data(validation_file_path, sep=',')
-X_test, y_test = load_data(test_file_path, sep= ',')
+X_test, y_test = load_data(test_file_path, sep=',')
 
 # Treinar o modelo KNN com os dados de treino
-knn = KNeighborsClassifier(n_neighbors=2)
+knn = KNeighborsClassifier(n_neighbors=8)
 knn.fit(X_train, y_train)
 
 # Validar o modelo com os dados de validação
@@ -41,29 +41,25 @@ val_precision = precision_score(y_val, y_val_pred, average='weighted')
 val_recall = recall_score(y_val, y_val_pred, average='weighted')
 val_f1 = f1_score(y_val, y_val_pred, average='weighted')
 
-# Exibir resultados
-print("Resultados de Validação:")
+# Exibir resultados da validação
+print("Resultados de Validação (KLN):")
 print(f"Acurácia: {val_accuracy}")
 print(f"Precisão: {val_precision}")
 print(f"Recall: {val_recall}")
 print(f"F1-Measure: {val_f1}")
 
-
-
-knn.fit(X_test, y_test)
-
-# Validar o modelo com os dados de validação
+# Avaliar o modelo com os dados de teste (sem treinar novamente)
 y_test_pred = knn.predict(X_test)
 
-# Calcular métricas
-val_accuracy = accuracy_score(y_test, y_test_pred)
-val_precision = precision_score(y_test, y_test_pred, average='weighted')
-val_recall = recall_score(y_test, y_test_pred, average='weighted')
-val_f1 = f1_score(y_test, y_test_pred, average='weighted')
+# Calcular métricas nos dados de teste
+test_accuracy = accuracy_score(y_test, y_test_pred)
+test_precision = precision_score(y_test, y_test_pred, average='weighted')
+test_recall = recall_score(y_test, y_test_pred, average='weighted')
+test_f1 = f1_score(y_test, y_test_pred, average='weighted')
 
-# Exibir resultados
-print("Resultados de teste:")
-print(f"Acurácia: {val_accuracy}")
-print(f"Precisão: {val_precision}")
-print(f"Recall: {val_recall}")
-print(f"F1-Measure: {val_f1}")
+# Exibir resultados do teste
+print("Resultados de Teste (KLN):")
+print(f"Acurácia: {test_accuracy}")
+print(f"Precisão: {test_precision}")
+print(f"Recall: {test_recall}")
+print(f"F1-Measure: {test_f1}")
