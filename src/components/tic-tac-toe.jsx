@@ -8,15 +8,17 @@ const TicTacToe = () => {
     const [data, setData] = useState(Array(9).fill(null)); // Usando state para o tabuleiro
     const [count, setCount] = useState(0);
     const [winner, setWinner] = useState(null); // Estado para o vencedor
+    const [winnerMessage, setWinnerMessage] = useState("Jogo da Velha"); // Estado para a mensagem de vencedor
+    const [statusMessage, setStatusMessage] = useState(""); // Nova mensagem de status para mostrar quem venceu ou empate
     const containerRef = useRef(null);
-    const titleRef = useRef("");
 
     const toggle = (e, index) => {
-        // Remover a verificação de "winner" para permitir jogadas após a vitória
-        if (data[index]) return; // Previne modificar uma célula já preenchida
+        // Previne modificar uma célula já preenchida ou se já houver um vencedor
+        if (data[index] || winner) return;
 
         const newData = [...data]; // Cópia do estado atual do tabuleiro
 
+        // Alterna entre X e O com base na contagem
         if (count % 2 === 0) {
             newData[index] = "X";
             containerRef.current.style.cursor = `url(${circle_icon}), auto`;
@@ -28,7 +30,7 @@ const TicTacToe = () => {
         setData(newData);
         setCount(count + 1);
 
-        // Verifica vitória apenas após a quinta jogada (mínimo necessário para uma vitória)
+        // Verifica vitória ou empate após a quinta jogada (mínimo necessário para uma vitória ou empate)
         if (count >= 4) {
             handlePlay(newData);
         }
@@ -45,9 +47,11 @@ const TicTacToe = () => {
             setWinner(response.data.winner); // Definir o vencedor com base na resposta do backend
 
             if (response.data.winner === 'Empate') {
-                titleRef.current.innerHTML = "Empate!";
+                setWinnerMessage("Empate!");
+                setStatusMessage("O jogo terminou em empate!");
             } else if (response.data.winner) {
-                titleRef.current.innerHTML = `Jogador <img src=${response.data.winner === "X" ? cross_icon : circle_icon} alt='icon' /> ganhou!`;
+                setWinnerMessage(`Jogador ${response.data.winner === "X" ? "X" : "O"} ganhou!`);
+                setStatusMessage(`Parabéns! Jogador ${response.data.winner} é o vencedor!`);
             }
         } catch (error) {
             console.error('Erro ao verificar o vencedor:', error);
@@ -62,21 +66,32 @@ const TicTacToe = () => {
         if (numberOfMoves >= 5) {
             checkWinner(newData);
         }
+
+        // Verifica se o tabuleiro está completo sem vencedor para declarar empate
+        if (numberOfMoves === 9 && !winner) {
+            setWinnerMessage("Empate!");
+            setStatusMessage("O jogo terminou em empate!");
+            setWinner("Empate");
+        }
     };
 
     const reset = () => {
         setData(Array(9).fill(null)); // Reinicia o estado do tabuleiro
-        titleRef.current.innerHTML = "Jogo da Velha";
+        setWinnerMessage("Jogo da Velha");
         setCount(0);
         containerRef.current.style.cursor = `url(${cross_icon}), auto`; // Reseta o cursor
         setWinner(null); // Reiniciar o estado do vencedor
+        setStatusMessage(""); // Reinicia a mensagem de status
     };
 
     return (
         <div className='container' ref={containerRef}>
-            <h1 className='title' ref={titleRef}>
-                Jogo da Velha
+            <h1 className='title'>
+                {winnerMessage}
             </h1>
+            <p className='status'>
+                {statusMessage}
+            </p>
             <div className='board'>
                 {data.map((value, index) => (
                     <div

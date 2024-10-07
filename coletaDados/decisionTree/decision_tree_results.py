@@ -9,16 +9,16 @@ test_file_path = 'C:\\Users\\Windows\\Documents\\IA-t1\\entrega\\coletaDados\\da
 
 # Função para carregar os dados de um CSV
 def load_data(file_path, sep=','):
-    # Ler o CSV com o separador especificado
+  
     data = pd.read_csv(file_path, sep=sep)
     
-    # Exibir as primeiras linhas do dataset para confirmar a leitura
+   
     print(f"Primeiras linhas de {file_path}:")
     print(data.head())
 
-    # Separar as colunas de features (X) e rótulos (y)
-    X = data.iloc[:, :-1].values  # Features (tabuleiro)
-    y = data.iloc[:, -1].values   # Rótulos (resultado do jogo)
+   
+    X = data.iloc[:, :-1].values  
+    y = data.iloc[:, -1].values   
     
     return X, y
 

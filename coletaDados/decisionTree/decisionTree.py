@@ -21,10 +21,10 @@ def encode_board(board):
 
 # Treinar o modelo Árvore de Decisão com o dataset fornecido
 def train_model(game_data):
-    X = game_data.iloc[:, :-1].values  # As primeiras colunas são os estados do tabuleiro
-    y = game_data.iloc[:, -1].values   # A última coluna é o resultado
+    X = game_data.iloc[:, :-1].values 
+    y = game_data.iloc[:, -1].values   
     
-    # Definir e treinar o modelo de Árvore de Decisão
+    
     decision_tree = DecisionTreeClassifier(random_state=200)
     decision_tree.fit(X, y)
     return decision_tree
