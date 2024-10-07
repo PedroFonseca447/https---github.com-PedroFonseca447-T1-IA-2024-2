@@ -1,24 +1,23 @@
 import React, { useRef, useState } from "react";
-import axios from "axios"; // Para fazer requisições HTTP
+import axios from "axios"; 
 import "../components/TicTacToe.css";
 import circle_icon from "../images/circle.png";
 import cross_icon from "../images/cross.png";
 
 const TicTacToe = () => {
-    const [data, setData] = useState(Array(9).fill(null)); // Usando state para o tabuleiro
+    const [data, setData] = useState(Array(9).fill(null)); 
     const [count, setCount] = useState(0);
-    const [winner, setWinner] = useState(null); // Estado para o vencedor
-    const [winnerMessage, setWinnerMessage] = useState("Jogo da Velha"); // Estado para a mensagem de vencedor
-    const [statusMessage, setStatusMessage] = useState(""); // Nova mensagem de status para mostrar quem venceu ou empate
+    const [winner, setWinner] = useState(null); 
+    const [winnerMessage, setWinnerMessage] = useState("Jogo da Velha"); 
+    const [statusMessage, setStatusMessage] = useState("");
     const containerRef = useRef(null);
 
     const toggle = (e, index) => {
-        // Previne modificar uma célula já preenchida ou se já houver um vencedor
+       
         if (data[index] || winner) return;
 
-        const newData = [...data]; // Cópia do estado atual do tabuleiro
+        const newData = [...data];
 
-        // Alterna entre X e O com base na contagem
         if (count % 2 === 0) {
             newData[index] = "X";
             containerRef.current.style.cursor = `url(${circle_icon}), auto`;
@@ -30,21 +29,21 @@ const TicTacToe = () => {
         setData(newData);
         setCount(count + 1);
 
-        // Verifica vitória ou empate após a quinta jogada (mínimo necessário para uma vitória ou empate)
+    
         if (count >= 4) {
             handlePlay(newData);
         }
     };
 
-    // Função para enviar o tabuleiro para o backend
+
     async function checkWinner(squares) {
         try {
-            console.log("Enviando tabuleiro para o backend:", squares);  // Verificar o estado do tabuleiro enviado
+            console.log("Enviando tabuleiro para o backend:", squares);  
             const response = await axios.post('http://localhost:5000/check_winner', {
                 board: squares,
             });
-            console.log("Resposta do backend: ", response.data); // Verificar a resposta do backend
-            setWinner(response.data.winner); // Definir o vencedor com base na resposta do backend
+            console.log("Resposta do backend: ", response.data); 
+            setWinner(response.data.winner); 
 
             if (response.data.winner === 'Empate') {
                 setWinnerMessage("Empate!");
@@ -59,15 +58,13 @@ const TicTacToe = () => {
     }
 
     const handlePlay = (newData) => {
-        // Contar o número de jogadas (não vazios)
+      
         const numberOfMoves = newData.filter(square => square !== null).length;
-
-        // Só verificar o vencedor se houver pelo menos 5 jogadas
+        
         if (numberOfMoves >= 5) {
             checkWinner(newData);
         }
-
-        // Verifica se o tabuleiro está completo sem vencedor para declarar empate
+        
         if (numberOfMoves === 9 && !winner) {
             setWinnerMessage("Empate!");
             setStatusMessage("O jogo terminou em empate!");
@@ -76,12 +73,12 @@ const TicTacToe = () => {
     };
 
     const reset = () => {
-        setData(Array(9).fill(null)); // Reinicia o estado do tabuleiro
+        setData(Array(9).fill(null)); 
         setWinnerMessage("Jogo da Velha");
         setCount(0);
-        containerRef.current.style.cursor = `url(${cross_icon}), auto`; // Reseta o cursor
-        setWinner(null); // Reiniciar o estado do vencedor
-        setStatusMessage(""); // Reinicia a mensagem de status
+        containerRef.current.style.cursor = `url(${cross_icon}), auto`; 
+        setWinner(null); 
+        setStatusMessage(""); 
     };
 
     return (
