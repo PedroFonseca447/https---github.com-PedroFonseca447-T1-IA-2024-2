@@ -9,6 +9,7 @@ const TicTacToe = () => {
     const [winner, setWinner] = useState(null);
     const [winnerMessage, setWinnerMessage] = useState("Jogo da Velha");
     const [statusMessage, setStatusMessage] = useState("");
+    const [difficulty, setDifficulty] = useState("hard"); // Default: hard
     const containerRef = useRef(null);
 
     const winningCombinations = [
@@ -56,13 +57,24 @@ const TicTacToe = () => {
     };
 
     const getBestMove = (board) => {
+        let randomChance = 0;
+        if (difficulty === "easy") randomChance = 0.75;
+        else if (difficulty === "medium") randomChance = 0.5;
+        else if (difficulty === "hard") randomChance = 0;
+
+        if (Math.random() < randomChance) {
+            // Realiza uma jogada aleatória com a probabilidade definida pelo nível de dificuldade
+            const availableMoves = board.map((v, i) => v === null ? i : null).filter(v => v !== null);
+            return availableMoves[Math.floor(Math.random() * availableMoves.length)];
+        }
+
+        // Jogada com minimax
         let bestScore = Infinity;
         let move;
-
         for (let i = 0; i < board.length; i++) {
             if (!board[i]) {
                 board[i] = "O";
-                let score = minimax(board, 0, true); // True aqui porque agora é a vez do "X" maximizar
+                let score = minimax(board, 0, true);
                 board[i] = null;
                 if (score < bestScore) {
                     bestScore = score;
@@ -119,6 +131,11 @@ const TicTacToe = () => {
         setStatusMessage("");
     };
 
+    const changeDifficulty = (level) => {
+        setDifficulty(level);
+        reset();
+    };
+
     return (
         <div className='container' ref={containerRef}>
             <h1 className='title'>
@@ -137,6 +154,11 @@ const TicTacToe = () => {
                         {value && <img src={value === "X" ? cross_icon : circle_icon} alt={value} />}
                     </div>
                 ))}
+            </div>
+            <div className='difficulty-buttons'>
+                <button onClick={() => changeDifficulty("easy")}>Fácil</button>
+                <button onClick={() => changeDifficulty("medium")}>Médio</button>
+                <button onClick={() => changeDifficulty("hard")}>Difícil</button>
             </div>
             <button className='reset' onClick={reset}>
                 Reset
